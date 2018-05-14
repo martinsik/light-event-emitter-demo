@@ -1,0 +1,11 @@
+.hidden {
+  display: none;
+}
+
+button {
+  margin-top: .5rem;
+}
+
+.result {
+  margin: 1rem 0;
+}

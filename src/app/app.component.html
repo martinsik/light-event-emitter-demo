@@ -1,20 +1,73 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+<section>
+  <div>
+    <button (click)="runComponentBenchmark(BenchmarkScenario.EventEmitterComponents1Binding)">Benchmark {{ config.COMPONENTS }} components with EventEmitter with 1 binding</button>
+  </div>
+  <div>
+    <button (click)="runComponentBenchmark(BenchmarkScenario.EventEmitterComponents5Bindings)">Benchmark {{ config.COMPONENTS }} components with EventEmitter with 5 bindings</button>
+  </div>
+  <div>
+    <button (click)="runComponentBenchmark(BenchmarkScenario.EventEmitterEmissions)">Benchmark {{ config.EMISSIONS }} emissions with EventEmitter</button>
+  </div>
 
+  <div>
+    <button (click)="runComponentBenchmark(BenchmarkScenario.LightEventEmitterComponents1Binding)">Benchmark {{ config.COMPONENTS }} components with LightEventEmitter with 1 binding</button>
+  </div>
+  <div>
+    <button (click)="runComponentBenchmark(BenchmarkScenario.LightEventEmitterComponents5Bindings)">Benchmark {{ config.COMPONENTS }} components with LightEventEmitter with 5 bindings</button>
+  </div>
+  <div>
+    <button (click)="runComponentBenchmark(BenchmarkScenario.LightEventEmitterEmissions)">Benchmark {{ config.EMISSIONS }} emissions with LightEventEmitter</button>
+  </div>
+</section>
+
+<section class="result">
+  Benchmark duration: <strong>{{ duration | date: 's.SSS' }}s</strong>
+</section>
+
+<section *ngIf="currentScenario === BenchmarkScenario.EventEmitterComponents1Binding">
+  <app-mock-component1
+    *ngFor="let i of iterationsArray"
+    [index]="i"
+    (out1)="componentCreated()">
+  </app-mock-component1>
+</section>
+
+<section *ngIf="currentScenario === BenchmarkScenario.EventEmitterComponents5Bindings">
+  <app-mock-component1
+    *ngFor="let i of iterationsArray"
+    [index]="i"
+    (out1)="componentCreated()"
+    (out2)="noopHandler()"
+    (out3)="noopHandler()"
+    (out4)="noopHandler()"
+    (out5)="noopHandler()">
+  </app-mock-component1>
+</section>
+
+<section [class.hidden]="currentScenario !== BenchmarkScenario.EventEmitterEmissions">
+  <app-mock-component2 (out1)="componentEmit($event)"></app-mock-component2>
+</section>
+
+<section *ngIf="currentScenario === BenchmarkScenario.LightEventEmitterComponents1Binding">
+  <app-mock-component3
+      *ngFor="let i of iterationsArray"
+      [index]="i"
+      (out1)="componentCreated()">
+  </app-mock-component3>
+</section>
+
+<section *ngIf="currentScenario === BenchmarkScenario.LightEventEmitterComponents5Bindings">
+  <app-mock-component3
+      *ngFor="let i of iterationsArray"
+      [index]="i"
+      (out1)="componentCreated()"
+      (out2)="noopHandler()"
+      (out3)="noopHandler()"
+      (out4)="noopHandler()"
+      (out5)="noopHandler()">
+  </app-mock-component3>
+</section>
+
+<section [class.hidden]="currentScenario !== BenchmarkScenario.LightEventEmitterEmissions">
+  <app-mock-component4 (out1)="componentEmit($event)"></app-mock-component4>
+</section>
