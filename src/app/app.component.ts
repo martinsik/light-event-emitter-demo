@@ -24,6 +24,9 @@ export class AppComponent {
   currentScenario: BenchmarkScenario;
   BenchmarkScenario = BenchmarkScenario;
   config = config;
+  results: { [key: number]: number[] };
+  activePromise: Promise<number>;
+  resolveActiveBenchmark: (value: number) => void;
 
   @ViewChild(MockComponent2Component) eventEmitterComponent: MockComponent2Component;
   @ViewChild(MockComponent4Component) lightEventEmitterComponent: MockComponent4Component;
@@ -39,24 +42,52 @@ export class AppComponent {
     }
   }
 
-  runComponentBenchmark(scenario: BenchmarkScenario): void {
-    this.currentScenario = null;
+  async run() {
+    const results = {};
+
+    for (const enumMember of Object.keys(BenchmarkScenario)) {
+      const intVal = parseInt(enumMember, 10);
+
+      if (intVal >= 0) {
+        results[intVal] = [];
+
+        for (let run = 0; run < config.RUNS; run++) {
+          const duration = await this.runComponentBenchmark(intVal);
+          results[intVal].push(duration);
+        }
+      }
+    }
+
+    this.results = results;
+    console.log(this.results);
+  }
+
+  async runComponentBenchmark(scenario: BenchmarkScenario): Promise<number> {
+    console.log('starting', scenario);
+    this.activePromise = new Promise((resolve, reject) => this.resolveActiveBenchmark = resolve);
 
     setTimeout(() => {
-      this.currentScenario = scenario;
-      this.started = new Date();
-      this.cdRef.markForCheck();
+      this.currentScenario = null;
+      this.cdRef.markForCheck(); // Let Angular remove previous components
 
-      switch (scenario) {
-        case BenchmarkScenario.EventEmitterEmissions:
-          this.eventEmitterComponent.startEmitting();
-          break;
+      setTimeout(() => {
+        this.currentScenario = scenario;
+        this.started = new Date();
+        this.cdRef.markForCheck();
 
-        case BenchmarkScenario.LightEventEmitterEmissions:
-          this.lightEventEmitterComponent.startEmitting();
-          break;
-      }
+        switch (scenario) {
+          case BenchmarkScenario.EventEmitterEmissions:
+            this.eventEmitterComponent.startEmitting();
+            break;
+
+          case BenchmarkScenario.LightEventEmitterEmissions:
+            this.lightEventEmitterComponent.startEmitting();
+            break;
+        }
+      });
     });
+
+    return this.activePromise;
   }
 
   noopHandler(): void {
@@ -74,7 +105,13 @@ export class AppComponent {
   }
 
   measureTime(): void {
-    this.duration = new Date(new Date().getTime() - this.started.getTime());
+    const duration = new Date().getTime() - this.started.getTime();
+    this.resolveActiveBenchmark(duration);
     this.cdRef.markForCheck();
+  }
+
+  calculateAverage(scenario: BenchmarkScenario): Date {
+    const results = this.results[scenario];
+    return new Date(results.reduce((acc, value) => acc + value, 0) / results.length);
   }
 }

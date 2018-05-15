@@ -1,28 +1,33 @@
 <section>
   <div>
-    <button (click)="runComponentBenchmark(BenchmarkScenario.EventEmitterComponents1Binding)">Benchmark {{ config.COMPONENTS }} components with EventEmitter with 1 binding</button>
-  </div>
-  <div>
-    <button (click)="runComponentBenchmark(BenchmarkScenario.EventEmitterComponents5Bindings)">Benchmark {{ config.COMPONENTS }} components with EventEmitter with 5 bindings</button>
-  </div>
-  <div>
-    <button (click)="runComponentBenchmark(BenchmarkScenario.EventEmitterEmissions)">Benchmark {{ config.EMISSIONS }} emissions with EventEmitter</button>
-  </div>
-
-  <div>
-    <button (click)="runComponentBenchmark(BenchmarkScenario.LightEventEmitterComponents1Binding)">Benchmark {{ config.COMPONENTS }} components with LightEventEmitter with 1 binding</button>
-  </div>
-  <div>
-    <button (click)="runComponentBenchmark(BenchmarkScenario.LightEventEmitterComponents5Bindings)">Benchmark {{ config.COMPONENTS }} components with LightEventEmitter with 5 bindings</button>
-  </div>
-  <div>
-    <button (click)="runComponentBenchmark(BenchmarkScenario.LightEventEmitterEmissions)">Benchmark {{ config.EMISSIONS }} emissions with LightEventEmitter</button>
+    <button (click)="run()">Run benchmark ({{ config.RUNS }} iterations)</button>
   </div>
 </section>
 
-<section class="result">
-  Benchmark duration: <strong>{{ duration | date: 's.SSS' }}s</strong>
-</section>
+<table *ngIf="results" border="1">
+  <thead>
+    <tr>
+      <th></th>
+      <th>{{ config.COMPONENTS }} Component with one Binding</th>
+      <th>{{ config.COMPONENTS }} Component with 5 Bindings</th>
+      <th>{{ config.EMISSIONS }} emissions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>EventEmitter</strong></td>
+      <td>{{ calculateAverage(BenchmarkScenario.EventEmitterComponents1Binding) | date: 's.SSS' }} s</td>
+      <td>{{ calculateAverage(BenchmarkScenario.EventEmitterComponents5Bindings) | date: 's.SSS' }} s</td>
+      <td>{{ calculateAverage(BenchmarkScenario.EventEmitterEmissions) | date: 's.SSS' }} s</td>
+    </tr>
+    <tr>
+      <td><strong>LightEventEmitter</strong></td>
+      <td>{{ calculateAverage(BenchmarkScenario.LightEventEmitterComponents1Binding) | date: 's.SSS' }} s</td>
+      <td>{{ calculateAverage(BenchmarkScenario.LightEventEmitterComponents5Bindings) | date: 's.SSS' }} s</td>
+      <td>{{ calculateAverage(BenchmarkScenario.LightEventEmitterEmissions) | date: 's.SSS' }} s</td>
+    </tr>
+  </tbody>
+</table>
 
 <section *ngIf="currentScenario === BenchmarkScenario.EventEmitterComponents1Binding">
   <app-mock-component1

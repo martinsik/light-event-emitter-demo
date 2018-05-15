@@ -9,3 +9,8 @@ button {
 .result {
   margin: 1rem 0;
 }
+
+td, th {
+  text-align: center;
+  padding: .25rem;
+}
