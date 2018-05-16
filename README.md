@@ -1,27 +1,13 @@
-# LightEventEmitter
+# LightEventEmitter - Benchmark
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.1.
+Purpose of this project is to test performance impact of creating components with 1, 5 and 10 output bindings (`@Output`) using the default `EventEmitter` class and then my custom `LightEventEmitter`.
 
-## Development server
+The `EventEmitter` class inherits from RxJS's `Subject` which means it does a lot of overhead work that is almost never necessary. In particular RxJS Subjects support `error` and `complete` notifications that are never useful when sending events via `@Output`. This means that Subjects have to maintain their internal state on every new subscription and on every emission. However, in typical use-cases for `@Output` this is never necessary and thus we could be using `@Output` with some other object than `EventEmitter` without all the unecessary functionality that could perorm much better.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+The `LightEventEmitter` is supposed to be a drop-in replacement for `EventEmitter`. It's stripped of internal state variables which makes subscriptions faster and emitting values even faster.
 
-## Code scaffolding
+See live benchmark (takes about a minute to finish): https://stackblitz.com/edit/light-event-emitter-test?file=src%2Fapp%2Fapp.component.ts
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+The following image shows a typical result ran on dual core MacBook Pro (mid 2012).
 
-## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).

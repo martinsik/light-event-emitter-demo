@@ -8,8 +8,9 @@
   <thead>
     <tr>
       <th></th>
-      <th>{{ config.COMPONENTS }} Component with one Binding</th>
+      <th>{{ config.COMPONENTS }} Component with 1 Binding</th>
       <th>{{ config.COMPONENTS }} Component with 5 Bindings</th>
+      <th>{{ config.COMPONENTS }} Component with 10 Bindings</th>
       <th>{{ config.EMISSIONS }} emissions</th>
     </tr>
   </thead>
@@ -18,12 +19,14 @@
       <td><strong>EventEmitter</strong></td>
       <td>{{ calculateAverage(BenchmarkScenario.EventEmitterComponents1Binding) | date: 's.SSS' }} s</td>
       <td>{{ calculateAverage(BenchmarkScenario.EventEmitterComponents5Bindings) | date: 's.SSS' }} s</td>
+      <td>{{ calculateAverage(BenchmarkScenario.EventEmitterComponents10Bindings) | date: 's.SSS' }} s</td>
       <td>{{ calculateAverage(BenchmarkScenario.EventEmitterEmissions) | date: 's.SSS' }} s</td>
     </tr>
     <tr>
       <td><strong>LightEventEmitter</strong></td>
       <td>{{ calculateAverage(BenchmarkScenario.LightEventEmitterComponents1Binding) | date: 's.SSS' }} s</td>
       <td>{{ calculateAverage(BenchmarkScenario.LightEventEmitterComponents5Bindings) | date: 's.SSS' }} s</td>
+      <td>{{ calculateAverage(BenchmarkScenario.LightEventEmitterComponents10Bindings) | date: 's.SSS' }} s</td>
       <td>{{ calculateAverage(BenchmarkScenario.LightEventEmitterEmissions) | date: 's.SSS' }} s</td>
     </tr>
   </tbody>
@@ -33,7 +36,7 @@
   <app-mock-component1
     *ngFor="let i of iterationsArray"
     [index]="i"
-    (out1)="componentCreated()">
+    (out0)="componentCreated()">
   </app-mock-component1>
 </section>
 
@@ -41,11 +44,28 @@
   <app-mock-component1
     *ngFor="let i of iterationsArray"
     [index]="i"
-    (out1)="componentCreated()"
+    (out0)="componentCreated()"
+    (out1)="noopHandler()"
+    (out2)="noopHandler()"
+    (out3)="noopHandler()"
+    (out4)="noopHandler()">
+  </app-mock-component1>
+</section>
+
+<section *ngIf="currentScenario === BenchmarkScenario.EventEmitterComponents10Bindings">
+  <app-mock-component1
+    *ngFor="let i of iterationsArray"
+    [index]="i"
+    (out0)="componentCreated()"
+    (out1)="noopHandler()"
     (out2)="noopHandler()"
     (out3)="noopHandler()"
     (out4)="noopHandler()"
-    (out5)="noopHandler()">
+    (out5)="noopHandler()"
+    (out6)="noopHandler()"
+    (out7)="noopHandler()"
+    (out8)="noopHandler()"
+    (out9)="noopHandler()">
   </app-mock-component1>
 </section>
 
@@ -57,7 +77,7 @@
   <app-mock-component3
       *ngFor="let i of iterationsArray"
       [index]="i"
-      (out1)="componentCreated()">
+      (out0)="componentCreated()">
   </app-mock-component3>
 </section>
 
@@ -65,11 +85,28 @@
   <app-mock-component3
       *ngFor="let i of iterationsArray"
       [index]="i"
-      (out1)="componentCreated()"
+      (out0)="componentCreated()"
+      (out1)="noopHandler()"
+      (out2)="noopHandler()"
+      (out3)="noopHandler()"
+      (out4)="noopHandler()">
+  </app-mock-component3>
+</section>
+
+<section *ngIf="currentScenario === BenchmarkScenario.LightEventEmitterComponents10Bindings">
+  <app-mock-component3
+      *ngFor="let i of iterationsArray"
+      [index]="i"
+      (out0)="componentCreated()"
+      (out1)="noopHandler()"
       (out2)="noopHandler()"
       (out3)="noopHandler()"
       (out4)="noopHandler()"
-      (out5)="noopHandler()">
+      (out5)="noopHandler()"
+      (out6)="noopHandler()"
+      (out7)="noopHandler()"
+      (out8)="noopHandler()"
+      (out9)="noopHandler()">
   </app-mock-component3>
 </section>
 

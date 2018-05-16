@@ -6,9 +6,11 @@ import * as config from './config';
 enum BenchmarkScenario {
   EventEmitterComponents1Binding,
   EventEmitterComponents5Bindings,
+  EventEmitterComponents10Bindings,
   EventEmitterEmissions,
   LightEventEmitterComponents1Binding,
   LightEventEmitterComponents5Bindings,
+  LightEventEmitterComponents10Bindings,
   LightEventEmitterEmissions,
 }
 
